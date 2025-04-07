@@ -1,0 +1,227 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instagram Clone</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      background-color: #fafafa;
+      color: #000;
+      transition: background 0.3s, color 0.3s;
+    }
+    .dark-mode {
+      background-color: #121212;
+      color: #fff;
+    }
+    .navbar, .footer, .sidebar, .post, .auth-container {
+      background: #fff;
+      transition: background 0.3s;
+    }
+    .dark-mode .navbar, .dark-mode .footer, .dark-mode .sidebar, .dark-mode .post, .dark-mode .auth-container {
+      background: #1e1e1e;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .sidebar {
+      width: 200px;
+      position: fixed;
+      top: 60px;
+      bottom: 0;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+    .feed {
+      margin-left: 220px;
+      padding: 20px;
+    }
+    .story-section {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .story {
+      width: 70px;
+      height: 70px;
+      background-color: #ddd;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .post {
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+    .post img {
+      width: 100%;
+      border-radius: 5px;
+    }
+    .footer {
+      text-align: center;
+      padding: 15px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+    .auth-container {
+      max-width: 300px;
+      margin: 100px auto;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px;
+      width: 100%;
+      background: #3897f0;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .toggle-mode {
+      cursor: pointer;
+    }
+    .hidden {
+      display: none;
+    }
+    .comment-box {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="auth" class="auth-container">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p>Don't have an account? <a href="#" onclick="showSignup()">Sign Up</a></p>
+  </div>  <div id="main" class="hidden">
+    <div class="navbar">
+      <div>Instagram Clone</div>
+      <div>
+        <span class="toggle-mode" onclick="toggleDarkMode()">🌙</span>
+      </div>
+    </div><aside class="sidebar">
+  <ul>
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Profile</a></li>
+    <li><a href="#">Messages</a></li>
+    <li><a href="#">Explore</a></li>
+    <li><a href="#" onclick="logout()">Logout</a></li>
+  </ul>
+</aside>
+
+<main class="feed">
+  <section class="story-section">
+    <div class="story">Story 1</div>
+    <div class="story">Story 2</div>
+    <div class="story">Story 3</div>
+  </section>
+
+  <section class="upload">
+    <h3>Upload a Post</h3>
+    <input type="file" id="imageInput">
+    <input type="text" placeholder="Caption" id="caption">
+    <button onclick="uploadPost()">Upload</button>
+  </section>
+
+  <section class="posts" id="posts">
+    <!-- Posts will appear here -->
+  </section>
+</main>
+
+<footer class="footer">
+  <p>&copy; 2025 Instagram Clone</p>
+</footer>
+
+  </div>  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+
+    function login() {
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+      if (user && pass) {
+        document.getElementById("auth").style.display = "none";
+        document.getElementById("main").classList.remove("hidden");
+      } else {
+        alert("Enter username and password");
+      }
+    }
+
+    function logout() {
+      document.getElementById("main").classList.add("hidden");
+      document.getElementById("auth").style.display = "block";
+    }
+
+    function showSignup() {
+      document.getElementById("auth").innerHTML = `
+        <h2>Sign Up</h2>
+        <input type="text" id="newUser" placeholder="New Username">
+        <input type="password" id="newPass" placeholder="New Password">
+        <button onclick="signup()">Sign Up</button>
+        <p>Already have an account? <a href='#' onclick='location.reload()'>Login</a></p>
+      `;
+    }
+
+    function signup() {
+      const newUser = document.getElementById("newUser").value;
+      const newPass = document.getElementById("newPass").value;
+      if (newUser && newPass) {
+        alert("Account created! Now login.");
+        location.reload();
+      } else {
+        alert("Fill all fields");
+      }
+    }
+
+    function uploadPost() {
+      const caption = document.getElementById("caption").value;
+      const imageInput = document.getElementById("imageInput");
+      if (imageInput.files.length === 0) return alert("Select an image");
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const post = document.createElement("div");
+        post.classList.add("post");
+        post.innerHTML = `
+          <h4>You</h4>
+          <img src="${e.target.result}" />
+          <p>${caption}</p>
+          <div>
+            <i class="fa fa-heart"></i> <i class="fa fa-comment"></i>
+          </div>
+          <div class="comment-box">
+            <input type='text' placeholder='Add a comment...' onkeydown='if(event.key==="Enter"){this.previousElementSibling.innerHTML+=`<p>`+this.value+`</p>`; this.value=""}'>
+            <div class="comments"></div>
+          </div>
+        `;
+        document.getElementById("posts").prepend(post);
+      };
+      reader.readAsDataURL(imageInput.files[0]);
+    }
+  </script></body>
+</html>
